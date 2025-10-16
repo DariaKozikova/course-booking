@@ -1,5 +1,18 @@
+/* 1. ДОДАВАННЯ ДИРЕКТИВ TAILWIND CSS */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+/* 2. ВАШІ ОРИГІНАЛЬНІ СТИЛІ (ПІСЛЯ ІМПОРТУ TAILWIND) */
+
 body {
   margin: 0;
+  /*
+    Tailwind встановлює 'font-family' за замовчуванням.
+    Якщо ви хочете перевизначити, як показано нижче,
+    ви повинні робити це ПІСЛЯ імпорту Tailwind.
+  */
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
