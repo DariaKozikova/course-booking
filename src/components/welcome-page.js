@@ -1,13 +1,10 @@
 import React from 'react';
 
-// Використовуємо класи Tailwind, щоб відповідати помаранчевому стилю форми реєстрації.
-
 export default function WelcomePage() {
   return (
     <div
       className="min-h-screen flex items-center justify-center p-5 font-inter relative overflow-hidden"
       style={{
-        // Помаранчевий градієнт фону (#f97316 - orange-500, #c2410c - orange-700)
         background: "linear-gradient(135deg, #f97316 0%, #c2410c 100%)", 
       }}
     >
@@ -29,7 +26,6 @@ export default function WelcomePage() {
         className="text-white text-6xl sm:text-7xl lg:text-8xl font-semibold text-center 
                    leading-tight tracking-tight px-5 drop-shadow-2xl z-20"
         style={{
-          // Змінено шрифт на Cormorant Garamond, який є більш елегантним.
           fontFamily: "'Cormorant Garamond', serif",
           textShadow: "0 4px 20px rgba(0,0,0,0.6)",
           animation: "fadeIn 2s ease-in-out",
