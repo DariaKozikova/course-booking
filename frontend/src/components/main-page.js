@@ -104,9 +104,6 @@ const TableVisual = ({ table, isSelected = false, isAvailable = true }) => {
   );
 };
 
-/* Компонент модального вікна
-const ReservationModalMock = ({ visible = false }) => { ... } 
-*/
 
 export default function ReservationAppMock() {
   const selectedTable = null;
@@ -132,12 +129,12 @@ export default function ReservationAppMock() {
           <motion.div className="lg:w-1/3 mb-8 lg:mb-0">
             <div className="bg-white p-6 rounded-xl shadow-2xl border border-gray-100 lg:sticky lg:top-4 space-y-6">
               
-              {/* --- 1. Оберіть Локацію --- */}
+              {/* Оберіть Локацію */}
               {/*
               <section className="border-b pb-4">...</section>
               */}
 
-              {/* --- 2. Оберіть Дату --- */}
+              {/* Оберіть Дату*/}
               <section className="border-b pb-4">
                 <h2 className="text-xl font-bold text-gray-700 mb-3">2. Оберіть Дату</h2>
                 <input
@@ -149,7 +146,7 @@ export default function ReservationAppMock() {
                 />
               </section>
 
-              {/* --- 3. Кількість Гостей --- */}
+              {/* Кількість Гостей */}
               <section className="border-b pb-4">
                 <h2 className="text-xl font-bold text-gray-700 mb-3">3. Кількість Гостей</h2>
                 <div className="flex items-center justify-between space-x-2 p-3 bg-gray-100 rounded-xl shadow-inner border border-gray-200">
@@ -159,7 +156,7 @@ export default function ReservationAppMock() {
                 </div>
               </section>
 
-              {/* --- 4. Час Бронювання --- */}
+              {/* Час Бронювання*/}
               <section className="border-b pb-4">
                 <h2 className="text-xl font-bold text-gray-700 mb-3">4. Час Бронювання</h2>
                 <div className="flex space-x-4">
@@ -183,18 +180,9 @@ export default function ReservationAppMock() {
                   </div>
                 </div>
               </section>
-
-              {/* --- 5. Обраний Стіл --- */}
-              {/*
-              <section>...</section>
-              */}
             </div>
           </motion.div>
 
-          {/* Зал */}
-          {/*
-          <motion.div>...</motion.div>
-          */}
         </div>
       </div>
     </div>

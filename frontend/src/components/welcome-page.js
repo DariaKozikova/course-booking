@@ -8,7 +8,7 @@ export default function WelcomePage() {
         background: "linear-gradient(135deg, #f97316 0%, #c2410c 100%)", 
       }}
     >
-      {/* Напівпрозора бликова пляма */}
+
       <div
         className="absolute w-96 h-96 rounded-full transform -translate-x-1/2 -translate-y-1/2"
         style={{

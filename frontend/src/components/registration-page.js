@@ -1,8 +1,5 @@
 import React, { useState } from "react";
 
-// Використовуємо класи Tailwind для помаранчевої палітри
-// Orange-500 та Orange-700 для основного стилю
-
 export default function RegistrationPage() {
   const [focusedInput, setFocusedInput] = useState(null);
 
@@ -39,7 +36,6 @@ export default function RegistrationPage() {
     <div
       className="min-h-screen flex items-center justify-center p-5 font-inter"
       style={{
-        // Помаранчевий градієнт фону (#f97316 - orange-500, #c2410c - orange-700)
         background: "linear-gradient(135deg, #f97316 0%, #c2410c 100%)", 
       }}
     >
