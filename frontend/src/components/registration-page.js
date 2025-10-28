@@ -1,124 +1,150 @@
 import React, { useState } from "react";
 
 export default function RegistrationPage() {
+  const [formValues, setFormValues] = useState({
+    name: "",
+    surname: "",
+    email: "",
+    password: ""
+  });
+
+  // Для підсвітки активного інпуту
   const [focusedInput, setFocusedInput] = useState(null);
 
-  // Функція для отримання класів динамічної межі
-  const getInputClasses = (name) => {
-    return `w-full p-4 my-2 rounded-xl border-2 text-base outline-none transition-all duration-300 bg-gray-50 shadow-inner
+  // Повідомлення про помилку або успіх
+  const [errorMessage, setErrorMessage] = useState("");
+
+  // Функція для зміни значень форми
+  function handleInputChange(event) {
+    const inputName = event.target.name;
+    const inputValue = event.target.value;
+
+    setFormValues({
+      ...formValues,
+      [inputName]: inputValue
+    });
+  }
+
+  function getInputClasses(inputName) {
+    return `
+      w-full p-4 my-2 rounded-xl border-2 text-base outline-none transition-all duration-300 bg-gray-50 shadow-inner
       focus:ring-2 focus:ring-orange-500
-      ${focusedInput === name ? 'border-orange-500' : 'border-gray-300'}
+      ${focusedInput === inputName ? "border-orange-500" : "border-gray-300"}
     `;
-  };
-  
-  // Класи для основної кнопки
-  const mainButtonClasses = `
-    w-full py-4 border-none rounded-xl 
-    bg-gradient-to-r from-orange-500 to-orange-700 text-white 
-    text-lg font-semibold cursor-pointer mt-3 transition-all duration-300 
-    shadow-lg shadow-orange-500/50 hover:shadow-xl hover:scale-[1.01] 
-    flex items-center justify-center space-x-2
-  `;
+  }
 
-  // Класи для вторинних кнопок
-  const secondaryButtonClasses = (isPrimary) => `
-    px-7 py-3 rounded-xl 
-    border-2 font-medium transition-all duration-300 
-    hover:bg-gray-50 hover:shadow-md min-w-[120px]
-    ${isPrimary 
-      ? 'border-orange-500 text-orange-600' 
-      : 'border-gray-400 text-gray-600'
+  // Функція для відправки форми
+  async function handleFormSubmit(event) {
+    event.preventDefault();
+    setErrorMessage("");
+
+    try {
+      const response = await fetch("http://localhost:8081/restaurant_booking_app", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formValues)
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setErrorMessage("Користувача додано успішно!");
+        setFormValues({ name: "", surname: "", email: "", password: "" });
+      } else {
+        setErrorMessage(data.error || "Виникла помилка при додаванні користувача");
+      }
+    } catch (error) {
+      console.error(error);
+      setErrorMessage("Сервер недоступний. Будь ласка, спробуйте пізніше.");
     }
-  `;
-
+  }
 
   return (
     <div
       className="min-h-screen flex items-center justify-center p-5 font-inter"
-      style={{
-        background: "linear-gradient(135deg, #f97316 0%, #c2410c 100%)", 
-      }}
+      style={{ background: "linear-gradient(135deg, #f97316 0%, #c2410c 100%)" }}
     >
-      <div
-        className="bg-white/95 backdrop-blur-md p-8 sm:p-10 rounded-3xl shadow-2xl w-full max-w-md text-center 
-                   border border-white/30 transform transition-all duration-300 hover:shadow-3xl"
-      >
-        {/* Логотип / Іконка */}
+      <div className="bg-white/95 backdrop-blur-md p-8 sm:p-10 rounded-3xl shadow-2xl w-full max-w-md text-center border border-white/30">
+        {/* Логотип */}
         <div className="mb-8">
           <div className="w-16 h-16 rounded-full mx-auto flex items-center justify-center text-3xl text-white 
-              bg-gradient-to-br from-orange-500 to-orange-700 shadow-xl shadow-orange-400/50">
+            bg-gradient-to-br from-orange-500 to-orange-700 shadow-xl shadow-orange-400/50">
             👤
           </div>
         </div>
-        
-        {/* Заголовок */}
+
         <h2 className="mb-8 text-3xl font-extrabold text-gray-800 tracking-tight">
           Створити акаунт
         </h2>
 
-        {/* Форма вводу */}
-        <div className="space-y-3 mb-8">
-          <input 
-            type="text" 
-            placeholder="Ім'я" 
+        {/* Форма */}
+        <form onSubmit={handleFormSubmit} className="space-y-3 mb-8">
+          <input
+            type="text"
+            name="name"
+            placeholder="Ім'я"
+            value={formValues.name}
+            onChange={handleInputChange}
             className={getInputClasses("name")}
             onFocus={() => setFocusedInput("name")}
             onBlur={() => setFocusedInput(null)}
+            required
           />
-          <input 
-            type="text" 
-            placeholder="Прізвище" 
+          <input
+            type="text"
+            name="surname"
+            placeholder="Прізвище"
+            value={formValues.surname}
+            onChange={handleInputChange}
             className={getInputClasses("surname")}
             onFocus={() => setFocusedInput("surname")}
             onBlur={() => setFocusedInput(null)}
+            required
           />
-          <input 
-            type="email" 
-            placeholder="Електронна пошта" 
+          <input
+            type="email"
+            name="email"
+            placeholder="Електронна пошта"
+            value={formValues.email}
+            onChange={handleInputChange}
             className={getInputClasses("email")}
             onFocus={() => setFocusedInput("email")}
             onBlur={() => setFocusedInput(null)}
+            required
           />
-          <input 
-            type="password" 
-            placeholder="Пароль" 
+          <input
+            type="password"
+            name="password"
+            placeholder="Пароль"
+            value={formValues.password}
+            onChange={handleInputChange}
             className={getInputClasses("password")}
             onFocus={() => setFocusedInput("password")}
             onBlur={() => setFocusedInput(null)}
+            required
           />
-        </div>
 
-        {/* Головна кнопка */}
-        <button className={mainButtonClasses}>
-          <span>✓</span>
-          Зареєструватися
-        </button>
-
-        {/* Роздільник */}
-        <div className="relative my-7">
-          <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t border-gray-200"></div>
-          </div>
-          <div className="relative flex justify-center text-sm">
-            <span className="px-4 bg-white text-gray-500 font-medium">
-              або
-            </span>
-          </div>
-        </div>
-
-        {/* Вторинні кнопки */}
-        <div className="flex flex-col sm:flex-row gap-3 justify-center">
-          <button 
-            className={secondaryButtonClasses(true)}
+          <button
+            type="submit"
+            className="w-full py-4 border-none rounded-xl 
+                       bg-gradient-to-r from-orange-500 to-orange-700 text-white 
+                       text-lg font-semibold cursor-pointer mt-3 transition-all duration-300 
+                       shadow-lg shadow-orange-500/50 hover:shadow-xl hover:scale-[1.01] 
+                       flex items-center justify-center space-x-2"
           >
-            <span className="mr-2">→</span>
-            Увійти
+            <span>✓</span> Зареєструватися
           </button>
-          <button 
-            className={secondaryButtonClasses(false)}
+        </form>
+
+        {errorMessage && <p className="text-center text-red-600">{errorMessage}</p>}
+
+        {/* Вторинна кнопка "Увійти" */}
+        <div className="flex justify-center mt-4">
+          <button
+            className="px-7 py-3 rounded-xl border-2 font-medium transition-all duration-300 
+                       hover:bg-gray-50 hover:shadow-md min-w-[120px] border-orange-500 text-orange-600"
           >
-            <span className="mr-2">👀</span>
-            Продовжити як Гість
+            <span className="mr-2">→</span> Увійти
           </button>
         </div>
       </div>
