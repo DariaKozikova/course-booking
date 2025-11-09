@@ -1,28 +1,22 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function RegistrationPage() {
+  const navigate = useNavigate();
+
   const [formValues, setFormValues] = useState({
     name: "",
     surname: "",
     email: "",
     password: ""
   });
-
-  // Для підсвітки активного інпуту
   const [focusedInput, setFocusedInput] = useState(null);
-
-  // Повідомлення про помилку або успіх
   const [errorMessage, setErrorMessage] = useState("");
 
-  // Функція для зміни значень форми
   function handleInputChange(event) {
     const inputName = event.target.name;
     const inputValue = event.target.value;
-
-    setFormValues({
-      ...formValues,
-      [inputName]: inputValue
-    });
+    setFormValues({ ...formValues, [inputName]: inputValue });
   }
 
   function getInputClasses(inputName) {
@@ -33,7 +27,6 @@ export default function RegistrationPage() {
     `;
   }
 
-  // Функція для відправки форми
   async function handleFormSubmit(event) {
     event.preventDefault();
     setErrorMessage("");
@@ -48,8 +41,8 @@ export default function RegistrationPage() {
       const data = await response.json();
 
       if (response.ok) {
-        setErrorMessage("Користувача додано успішно!");
         setFormValues({ name: "", surname: "", email: "", password: "" });
+        navigate("/main");
       } else {
         setErrorMessage(data.error || "Виникла помилка при додаванні користувача");
       }
@@ -59,13 +52,16 @@ export default function RegistrationPage() {
     }
   }
 
+  const logout = () => {
+    navigate("/user_y");
+  };
+
   return (
     <div
       className="min-h-screen flex items-center justify-center p-5 font-inter"
       style={{ background: "linear-gradient(135deg, #f97316 0%, #c2410c 100%)" }}
     >
       <div className="bg-white/95 backdrop-blur-md p-8 sm:p-10 rounded-3xl shadow-2xl w-full max-w-md text-center border border-white/30">
-        {/* Логотип */}
         <div className="mb-8">
           <div className="w-16 h-16 rounded-full mx-auto flex items-center justify-center text-3xl text-white 
             bg-gradient-to-br from-orange-500 to-orange-700 shadow-xl shadow-orange-400/50">
@@ -77,7 +73,6 @@ export default function RegistrationPage() {
           Створити акаунт
         </h2>
 
-        {/* Форма */}
         <form onSubmit={handleFormSubmit} className="space-y-3 mb-8">
           <input
             type="text"
@@ -138,13 +133,21 @@ export default function RegistrationPage() {
 
         {errorMessage && <p className="text-center text-red-600">{errorMessage}</p>}
 
-        {/* Вторинна кнопка "Увійти" */}
-        <div className="flex justify-center mt-4">
+        <div className="flex justify-center mt-4 space-x-4">
           <button
+            onClick={() => navigate("/user_y")}
             className="px-7 py-3 rounded-xl border-2 font-medium transition-all duration-300 
                        hover:bg-gray-50 hover:shadow-md min-w-[120px] border-orange-500 text-orange-600"
           >
             <span className="mr-2">→</span> Увійти
+          </button>
+
+          <button
+            onClick={logout}
+            className="px-7 py-3 rounded-xl border-2 border-red-500 text-red-600 font-medium 
+                       transition-all duration-300 hover:bg-red-50 hover:shadow-md"
+          >
+            Вийти
           </button>
         </div>
       </div>

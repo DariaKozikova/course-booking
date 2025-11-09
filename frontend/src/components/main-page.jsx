@@ -1,7 +1,7 @@
 import React from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 
-/*  Допоміжні функції та Дані*/
 const getTodayDate = () => {
   const now = new Date();
   const year = now.getFullYear();
@@ -9,23 +9,6 @@ const getTodayDate = () => {
   const day = String(now.getDate()).padStart(2, "0");
   return `${year}-${month}-${day}`;
 };
-
-/* Столики
-const ALL_TABLES = [
-  { id: 1, capacity: 4, x: 50, y: 15, reserved: false, location: "hall", reservations: {} },
-  { id: 2, capacity: 6, x: 25, y: 35, reserved: true, location: "hall", reservations: { [getTodayDate()]: [{ start: "19:00", end: "21:00" }] } },
-  { id: 3, capacity: 6, x: 75, y: 35, reserved: false, location: "hall", reservations: {} },
-  { id: 4, capacity: 8, x: 50, y: 55, reserved: false, location: "hall", reservations: {} },
-  { id: 5, capacity: 6, x: 65, y: 75, reserved: true, location: "hall", reservations: {} },
-  { id: 6, capacity: 6, x: 35, y: 75, reserved: false, location: "hall", reservations: {} },
-  { id: 7, capacity: 4, x: 50, y: 95, reserved: false, location: "hall", reservations: {} },
-
-  { id: 8, capacity: 4, x: 30, y: 20, reserved: false, location: "terrace", reservations: {} },
-  { id: 9, capacity: 6, x: 70, y: 20, reserved: false, location: "terrace", reservations: {} },
-  { id: 10, capacity: 8, x: 50, y: 50, reserved: false, location: "terrace", reservations: {} },
-  { id: 11, capacity: 4, x: 30, y: 80, reserved: false, location: "terrace", reservations: {} },
-  { id: 12, capacity: 6, x: 70, y: 80, reserved: false, location: "terrace", reservations: {} },
-]; */
 
 const SEATING_ARRANGEMENT = {
   2: [[0, -35], [0, 35]],
@@ -104,37 +87,40 @@ const TableVisual = ({ table, isSelected = false, isAvailable = true }) => {
   );
 };
 
-
 export default function ReservationAppMock() {
+  const navigate = useNavigate();
   const selectedTable = null;
   const guestCount = 4;
   const reservationDate = getTodayDate();
   const reservationStartTime = "18:00";
   const reservationEndTime = "20:00";
-  const locationFilter = "hall";
   const today = getTodayDate();
-
-  /* const tablesToRender = ALL_TABLES.filter((t) => t.location === locationFilter);
-  const availableTablesCountForGuests = tablesToRender.filter((t) => !t.reserved && t.capacity >= guestCount).length; */
 
   return (
     <div className="min-h-screen bg-gray-50 p-4 sm:p-8 font-inter">
-      <div className="max-w-7xl mx-auto bg-white shadow-2xl rounded-xl p-4 sm:p-6 lg:p-8">
-        <h1 className="text-3xl sm:text-4xl font-extrabold text-gray-800 mb-6 border-b-4 border-orange-500 pb-2">
-          Бронювання Столиків <span className="text-xl font-medium text-gray-500 ml-2">RestaurantFlow</span>
+      {/*  Верхня панель */}
+      <header className="flex items-center justify-between mb-6 max-w-7xl mx-auto">
+        <h1 className="text-3xl sm:text-4xl font-extrabold text-gray-800">
+          Бронювання Столиків
+          <span className="text-xl font-medium text-gray-500 ml-2">RestaurantFlow</span>
         </h1>
 
+        {/*  Кнопка акаунта */}
+        <button
+          onClick={() => navigate("/user")}
+          className="px-6 py-2 rounded-xl bg-orange-500 text-white font-semibold shadow-md hover:bg-orange-600 transition-all duration-300"
+        >
+          👤 Мій акаунт
+        </button>
+      </header>
+
+      <div className="max-w-7xl mx-auto bg-white shadow-2xl rounded-xl p-4 sm:p-6 lg:p-8">
         <div className="lg:flex lg:space-x-8">
           {/* Бічна панель */}
           <motion.div className="lg:w-1/3 mb-8 lg:mb-0">
             <div className="bg-white p-6 rounded-xl shadow-2xl border border-gray-100 lg:sticky lg:top-4 space-y-6">
-              
-              {/* Оберіть Локацію */}
-              {/*
-              <section className="border-b pb-4">...</section>
-              */}
 
-              {/* Оберіть Дату*/}
+              {/* Дата */}
               <section className="border-b pb-4">
                 <h2 className="text-xl font-bold text-gray-700 mb-3">2. Оберіть Дату</h2>
                 <input
@@ -146,7 +132,7 @@ export default function ReservationAppMock() {
                 />
               </section>
 
-              {/* Кількість Гостей */}
+              {/* Кількість гостей */}
               <section className="border-b pb-4">
                 <h2 className="text-xl font-bold text-gray-700 mb-3">3. Кількість Гостей</h2>
                 <div className="flex items-center justify-between space-x-2 p-3 bg-gray-100 rounded-xl shadow-inner border border-gray-200">
@@ -156,7 +142,7 @@ export default function ReservationAppMock() {
                 </div>
               </section>
 
-              {/* Час Бронювання*/}
+              {/* Час бронювання */}
               <section className="border-b pb-4">
                 <h2 className="text-xl font-bold text-gray-700 mb-3">4. Час Бронювання</h2>
                 <div className="flex space-x-4">
@@ -182,7 +168,6 @@ export default function ReservationAppMock() {
               </section>
             </div>
           </motion.div>
-
         </div>
       </div>
     </div>
