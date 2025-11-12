@@ -44,3 +44,21 @@ app.post('/restaurant_booking_app', (req, res) => {
 app.listen(8081, () => {
     console.log('Сервер запущено на порту 8081');
 });
+
+app.post('/login', (req, res) => {
+  const { email, password } = req.body;
+
+  const sql = 'SELECT * FROM users WHERE email = ? AND password = ?';
+  db.query(sql, [email, password], (error, results) => {
+    if (error) {
+      console.error('Помилка при вході користувача:', error);
+      return res.status(500).json({ error: 'Помилка сервера' });
+    }
+
+    if (results.length > 0) {
+      return res.json({ success: true, message: 'Вхід успішний', user: results[0] });
+    } else {
+      return res.status(401).json({ success: false, message: 'Користувача не знайдено або пароль невірний' });
+    }
+  });
+});
