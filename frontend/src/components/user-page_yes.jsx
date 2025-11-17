@@ -50,11 +50,23 @@ export default function UserPageExist() {
         data = { message: text };
       }
 
-      if (response.ok && data.success !== false) {
-        navigate("/main");
-      } else {
-        setErrorMessage(data.message || "Користувача не знайдено або пароль невірний");
-      }
+if (response.ok && data.success !== false) {
+  console.log("Отримано дані від сервера:", data);
+
+  if (data.user && (data.user.id || data.user.user_id)) {
+    const userId = data.user.id || data.user.user_id; 
+    localStorage.setItem("user", JSON.stringify(data.user));
+    console.log("✅ Успішний вхід. ID користувача:", userId);
+    navigate("/main");
+  } else {
+    setErrorMessage("Помилка: сервер повернув успішний вхід, але без даних користувача.");
+    console.error(" Login success, but no user data:", data);
+  }
+} else {
+  setErrorMessage(data.message || "Користувача не знайдено або пароль невірний");
+}
+
+
     } catch (error) {
       console.error("Помилка під час fetch /login:", error);
       setErrorMessage("Сталася помилка при з'єднанні з сервером");
@@ -64,7 +76,8 @@ export default function UserPageExist() {
   };
 
   const logout = () => {
-    navigate("/about");
+    localStorage.removeItem('user');
+    navigate("/about"); 
   };
 
   return (
@@ -141,3 +154,4 @@ export default function UserPageExist() {
     </div>
   );
 }
+
