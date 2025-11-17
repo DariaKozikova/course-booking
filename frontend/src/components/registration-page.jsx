@@ -1,3 +1,5 @@
+// src/components/registration-page.jsx
+
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -32,7 +34,9 @@ export default function RegistrationPage() {
     setErrorMessage("");
 
     try {
-      const response = await fetch("http://localhost:8081/restaurant_booking_app", {
+      // --- ОСЬ ТУТ БУЛА ПОМИЛКА ---
+      // Змінюємо "/restaurant_booking_app" на правильний маршрут "/register"
+      const response = await fetch("http://localhost:8081/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formValues)
@@ -41,8 +45,9 @@ export default function RegistrationPage() {
       const data = await response.json();
 
       if (response.ok) {
-        setFormValues({ name: "", surname: "", email: "", password: "" });
-        navigate("/main");
+        // Якщо все добре, перенаправляємо на сторінку входу, щоб користувач залогінився
+        alert("Реєстрація успішна! Тепер, будь ласка, увійдіть у свій акаунт.");
+        navigate("/user_y");
       } else {
         setErrorMessage(data.error || "Виникла помилка при додаванні користувача");
       }
@@ -53,6 +58,8 @@ export default function RegistrationPage() {
   }
 
   const logout = () => {
+    // Ця кнопка тут не дуже логічна, але залишаю її, якщо вона потрібна
+    localStorage.removeItem('user');
     navigate("/user_y");
   };
 
