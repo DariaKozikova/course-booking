@@ -19,6 +19,22 @@ db.query('SELECT 1', (err) => {
     else console.log('Підключено до MySQL!');
 });
 
+app.get('/tables', (req, res) => {
+    const sql = `
+        SELECT table_id, table_number, capacity, location, is_occupied, pos_x, pos_y 
+        FROM tables
+    `;
+
+    db.query(sql, (err, results) => {
+        if (err) {
+            console.error("Помилка при отриманні столів:", err);
+            return res.status(500).json({ error: "Server error" });
+        }
+        res.json(results);
+    });
+});
+
+
 // Реєстрація 
 app.post('/register', (req, res) => {
     const { name, surname, email, password } = req.body;
