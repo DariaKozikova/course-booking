@@ -86,26 +86,16 @@ app.post('/book-table', (req, res) => {
     });
 });   
 
-app.get('/my-bookings/:userId', (req, res) => {
-    const { userId } = req.params;
-
+app.get('/tables', (req, res) => {
     const sql = `
-        SELECT 
-            booking_id, 
-            table_id, 
-            booking_date, 
-            start_time, 
-            end_time, 
-            guest_count 
-        FROM bookings 
-        WHERE user_id = ? 
-        ORDER BY booking_date DESC, start_time DESC
+        SELECT table_id, table_number, capacity, location, is_occupied, pos_x, pos_y, width, height 
+        FROM tables
     `;
 
-    db.query(sql, [userId], (err, results) => {
+    db.query(sql, (err, results) => {
         if (err) {
-            console.error("Помилка при отриманні бронювань:", err);
-            return res.status(500).json({ success: false, message: "Помилка сервера" });
+            console.error("Помилка при отриманні столів:", err);
+            return res.status(500).json({ error: "Server error" });
         }
         res.json(results);
     });
