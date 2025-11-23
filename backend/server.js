@@ -19,18 +19,48 @@ db.query('SELECT 1', (err) => {
     else console.log('Підключено до MySQL!');
 });
 
-app.get('/tables', (req, res) => {
+app.get('/my-bookings/:userId', (req, res) => {
+    const userId = req.params.userId;
     const sql = `
-        SELECT table_id, table_number, capacity, location, is_occupied, pos_x, pos_y 
-        FROM tables
+        SELECT b.*, t.table_number 
+        FROM bookings b
+        JOIN tables t ON b.table_id = t.table_id
+        WHERE b.user_id = ?
+        ORDER BY b.booking_date DESC, b.start_time ASC
     `;
 
-    db.query(sql, (err, results) => {
+    db.query(sql, [userId], (err, results) => {
         if (err) {
-            console.error("Помилка при отриманні столів:", err);
-            return res.status(500).json({ error: "Server error" });
+            console.error("Помилка отримання бронювань:", err);
+            return res.status(500).json({ error: "Помилка сервера" });
         }
         res.json(results);
+    });
+});
+
+app.get('/bookings/occupied', (req, res) => {
+    const { date, startTime, endTime } = req.query;
+
+    if (!date || !startTime || !endTime) {
+        return res.status(400).json({ error: "Не вказано дату або час" });
+    }
+
+    const reqStart = `${date} ${startTime}:00`;
+    const reqEnd = `${date} ${endTime}:00`;
+
+    const sql = `
+        SELECT table_id FROM bookings 
+        WHERE booking_date = ? 
+        AND (start_time < ? AND end_time > ?)
+    `;
+
+    db.query(sql, [date, reqEnd, reqStart], (err, results) => {
+        if (err) {
+            console.error("Помилка перевірки зайнятості:", err);
+            return res.status(500).json({ error: "Помилка сервера" });
+        }
+        const occupiedIds = results.map(row => row.table_id);
+        res.json(occupiedIds);
     });
 });
 
