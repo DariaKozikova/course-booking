@@ -3,27 +3,10 @@ import { useNavigate } from "react-router-dom";
 
 export default function UserPageExist() {
   const navigate = useNavigate();
-  const [focusedInput, setFocusedInput] = useState(null);
-  const [errorMessage, setErrorMessage] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
   const [loading, setLoading] = useState(false);
-
-  const getInputClasses = (name) =>
-    `w-full p-4 my-2 rounded-xl border-2 text-base outline-none transition-all duration-300 bg-gray-50 shadow-inner
-      focus:ring-2 focus:ring-orange-500
-      ${focusedInput === name ? 'border-orange-500' : 'border-gray-300'}`;
-
-  const mainButtonClasses = `w-full py-4 border-none rounded-xl 
-    bg-gradient-to-r from-orange-500 to-orange-700 text-white 
-    text-lg font-semibold cursor-pointer mt-3 transition-all duration-300 
-    shadow-lg shadow-orange-500/50 hover:shadow-xl hover:scale-[1.01] 
-    flex items-center justify-center space-x-2`;
-
-  const secondaryButtonClasses = `px-7 py-3 rounded-xl 
-    border-2 font-medium transition-all duration-300 
-    hover:bg-gray-50 hover:shadow-md min-w-[120px]
-    border-orange-500 text-orange-600`;
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -50,25 +33,20 @@ export default function UserPageExist() {
         data = { message: text };
       }
 
-if (response.ok && data.success !== false) {
-  console.log("Отримано дані від сервера:", data);
-
-  if (data.user && (data.user.id || data.user.user_id)) {
-    const userId = data.user.id || data.user.user_id; 
-    localStorage.setItem("user", JSON.stringify(data.user));
-    console.log("✅ Успішний вхід. ID користувача:", userId);
-    navigate("/main");
-  } else {
-    setErrorMessage("Помилка: сервер повернув успішний вхід, але без даних користувача.");
-    console.error(" Login success, but no user data:", data);
-  }
-} else {
-  setErrorMessage(data.message || "Користувача не знайдено або пароль невірний");
-}
-
+      if (response.ok && data.success !== false) {
+        if (data.user && (data.user.id || data.user.user_id)) {
+          const userId = data.user.id || data.user.user_id;
+          localStorage.setItem("user", JSON.stringify(data.user));
+          navigate("/main");
+        } else {
+          setErrorMessage("Помилка: сервер повернув успішний вхід, але без даних користувача.");
+        }
+      } else {
+        setErrorMessage(data.message || "Користувача не знайдено або пароль невірний");
+      }
 
     } catch (error) {
-      console.error("Помилка під час fetch /login:", error);
+      console.error(error);
       setErrorMessage("Сталася помилка при з'єднанні з сервером");
     } finally {
       setLoading(false);
@@ -76,76 +54,72 @@ if (response.ok && data.success !== false) {
   };
 
   const logout = () => {
-    localStorage.removeItem('user');
-    navigate("/about"); 
+    localStorage.removeItem("user");
+    navigate("/about");
   };
 
   return (
-    <div
-      className="min-h-screen flex items-center justify-center p-5 font-inter"
-      style={{ background: "linear-gradient(135deg, #f97316 0%, #c2410c 100%)" }}
-    >
-      <div className="bg-white/95 backdrop-blur-md p-8 sm:p-10 rounded-3xl shadow-2xl w-full max-w-md text-center border border-white/30 transform transition-all duration-300 hover:shadow-3xl">
-        <div className="mb-8">
-          <div className="w-16 h-16 rounded-full mx-auto flex items-center justify-center text-3xl text-white 
-              bg-gradient-to-br from-orange-500 to-orange-700 shadow-xl shadow-orange-400/50">
-            🔒
-          </div>
-        </div>
+    <div className="min-h-screen flex items-center justify-center bg-orange-400 p-4">
+      <div className="bg-white p-8 rounded-2xl w-full max-w-md text-center">
 
-        <h2 className="mb-4 text-3xl font-extrabold text-gray-800 tracking-tight">
-          Ви вже маєте акаунт
-        </h2>
-        <p className="text-gray-600 mb-8 text-base">
-          Схоже, що ви вже реєструвалися раніше. Увійдіть до свого акаунта, щоб продовжити.
+        {/* Заголовок */}
+        <h2 className="text-2xl font-bold mb-2">Ви вже маєте акаунт</h2>
+        <p className="text-gray-600 mb-6 text-sm">
+          Схоже, що ви вже реєструвалися раніше. Увійдіть до свого акаунта.
         </p>
 
-        <form onSubmit={handleLogin} className="space-y-3 mb-4">
+        {/* Форма */}
+        <form onSubmit={handleLogin} className="space-y-3">
           <input
             type="email"
             placeholder="Електронна пошта"
-            className={getInputClasses("email")}
-            onFocus={() => setFocusedInput("email")}
-            onBlur={() => setFocusedInput(null)}
+            className="w-full p-3 border rounded-xl"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
           />
+
           <input
             type="password"
             placeholder="Пароль"
-            className={getInputClasses("password")}
-            onFocus={() => setFocusedInput("password")}
-            onBlur={() => setFocusedInput(null)}
+            className="w-full p-3 border rounded-xl"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
           />
 
-          <button type="submit" className={mainButtonClasses} disabled={loading}>
-            {loading ? "Завантаження..." : (<><span>→</span> Увійти</>)}
+          <button
+            type="submit"
+            className="w-full p-3 bg-orange-600 text-white rounded-xl font-semibold"
+            disabled={loading}
+          >
+            {loading ? "Завантаження..." : "→ Увійти"}
           </button>
         </form>
 
-        {errorMessage && <p className="text-red-600 font-medium mb-4">{errorMessage}</p>}
+        {/* Помилка */}
+        {errorMessage && <p className="text-red-600 mt-3">{errorMessage}</p>}
 
-        <div className="mt-6 text-sm text-gray-500">
+        {/* Посилання на відновлення паролю */}
+        <div className="mt-4 text-sm text-gray-500">
           Забули пароль?{" "}
-          <a href="#" className="text-orange-600 font-medium hover:underline transition-all">
+          <a href="#" className="text-orange-600 font-medium">
             Відновити
           </a>
         </div>
 
-        <div className="mt-8 flex justify-center space-x-4">
-          <button onClick={() => navigate("/about")} className={secondaryButtonClasses}>
-            <span className="mr-2">📝</span>
-            Зареєструвати інший акаунт
+        {/* Кнопки додаткові */}
+        <div className="mt-6 flex justify-center space-x-4">
+          <button
+            onClick={() => navigate("/about")}
+            className="px-5 py-2 border rounded-xl bg-orange-200"
+          >
+             Зареєструвати інший акаунт
           </button>
 
           <button
             onClick={logout}
-            className="px-7 py-3 rounded-xl border-2 border-red-500 text-red-600 font-medium 
-                       transition-all duration-300 hover:bg-red-50 hover:shadow-md"
+            className="px-5 py-2 border rounded-xl bg-red-200 text-red-700"
           >
             Вийти
           </button>
@@ -154,4 +128,3 @@ if (response.ok && data.success !== false) {
     </div>
   );
 }
-
