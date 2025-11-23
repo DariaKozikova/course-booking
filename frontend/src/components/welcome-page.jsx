@@ -1,12 +1,31 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react'; 
+import { useNavigate } from 'react-router-dom';   
 
 export default function WelcomePage() {
+  const navigate = useNavigate(); 
+  const [isExiting, setIsExiting] = useState(false); 
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsExiting(true); 
+    }, 3000); 
+
+    return () => clearTimeout(timer); 
+  }, []);
+
+  const handleAnimationEnd = () => {
+    if (isExiting) {
+      navigate('/about'); 
+    }
+  };
+
   return (
     <div
-      className="min-h-screen flex items-center justify-center p-5 font-inter relative overflow-hidden"
+      className={`min-h-screen flex items-center justify-center p-5 font-inter relative overflow-hidden ${isExiting ? 'fade-out-up' : ''}`}
       style={{
         background: "linear-gradient(135deg, #f97316 0%, #c2410c 100%)", 
       }}
+      onAnimationEnd={handleAnimationEnd} 
     >
 
       <div
@@ -20,8 +39,6 @@ export default function WelcomePage() {
           zIndex: 1,
         }}
       ></div>
-
-      {/* Заголовок */}
       <h1
         className="text-white text-6xl sm:text-7xl lg:text-8xl font-semibold text-center 
                    leading-tight tracking-tight px-5 drop-shadow-2xl z-20"
@@ -34,7 +51,6 @@ export default function WelcomePage() {
         Welcome to Our Restaurant
       </h1>
       
-      {/* Анімаційні стилі */}
       <style>
         {`
           @keyframes fadeIn {

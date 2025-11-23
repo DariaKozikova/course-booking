@@ -4,7 +4,6 @@ import WelcomePage from "./components/welcome-page";
 import RegistrationPage from "./components/registration-page"; 
 import MainPage from "./components/main-page";  
 import UserPage from "./components/user-page"; 
-import ConfirmPage from "./components/confirm-booking";
 import UserPageExist from "./components/user-page_yes";
 
 
@@ -17,7 +16,6 @@ export default function App() {
         <Link to="/about" style={{ marginRight: "10px" }}>Register-page</Link>
         <Link to="/main">Main-page</Link>   
         <Link to="/user"> User-page</Link>   
-        <Link to="/confirm"> Confirm-booking-page</Link>
         <Link to="/user_y"> User-page-yes </Link>
       </nav>
 
@@ -27,7 +25,6 @@ export default function App() {
         <Route path="/about" element={<RegistrationPage />} /> 
         <Route path="/main" element={<MainPage />} />  
         <Route path="/user" element={< UserPage />} />   
-        <Route path="/confirm" element={<ConfirmPage />} />  
         <Route path="/user_y" element={<UserPageExist />} />   
       </Routes>
     </Router>
