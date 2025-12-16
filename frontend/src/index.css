@@ -17,7 +17,6 @@ code {
     monospace;
 }
 
-/* Анімація для плавного зникання сторінки вгору */
 .fade-out-up {
   animation: fadeOutUp 1s ease-out forwards;
 }

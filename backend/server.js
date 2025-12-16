@@ -162,3 +162,4 @@ app.delete('/bookings/:bookingId', (req, res) => {
 });
 
 app.listen(8081, () => console.log('Сервер запущено на порту 8081'));
+ 
