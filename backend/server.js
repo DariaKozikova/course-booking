@@ -8,10 +8,10 @@ app.use(express.json());
 
 const db = mysql.createPool({
     connectionLimit: 10,
-    host: 'localhost',
-    user: 'root',
-    password: 'Dasha3488001',
-    database: 'restaurant_booking_app'
+    host: process.env.DB_HOST || 'localhost', 
+    user: process.env.DB_USER || 'root',
+    password: process.env.DB_PASSWORD || 'root', 
+    database: process.env.DB_NAME || 'restaurant_booking_app'
 });
 
 db.query('SELECT 1', (err) => {

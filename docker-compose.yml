@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  # 1. База даних
+  db:
+    image: mysql:8.0
+    container_name: restaurant_db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: restaurant_booking_app
+    ports:
+      - "3308:3306"
+    volumes:
+      - ./backend/db.sql:/docker-entrypoint-initdb.d/init.sql
+      - db_data:/var/lib/mysql
+
+  # 2. Сервер (Backend)
+  server:
+    build: ./backend
+    container_name: restaurant_server
+    restart: always
+    ports:
+      - "8081:8081"
+    depends_on:
+      - db
+    environment:
+      DB_HOST: db
+      DB_USER: root
+      DB_PASSWORD: root
+      DB_NAME: restaurant_booking_app
+
+  # 3. Клієнт (Frontend)
+  client:
+    build: ./frontend
+    container_name: restaurant_client
+    ports:
+      - "3000:3000"
+    stdin_open: true
+    tty: true
+    depends_on:
+      - server
+
+volumes:
+  db_data:
