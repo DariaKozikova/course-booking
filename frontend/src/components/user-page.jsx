@@ -73,24 +73,26 @@ export default function UserAccountPage() {
     }
   };
 
-  const formatDate = (dateString) => {
-    try {
-      return new Date(dateString).toLocaleDateString('uk-UA', { 
-        year: 'numeric', month: 'long', day: 'numeric' 
-      });
-    } catch (e) {
-      return dateString;
-    }
+
+const formatDate = (dateString) => {
+    if (!dateString) return "";
+    const datePart = dateString.split(' ')[0]; 
+    
+    const date = new Date(datePart);
+    
+    return date.toLocaleDateString('uk-UA', { 
+      year: 'numeric', month: 'long', day: 'numeric' 
+    });
   };
 
   const formatTime = (dateString) => {
-    try {
-        return new Date(dateString).toLocaleTimeString('uk-UA', { 
-            hour: '2-digit', minute: '2-digit' 
-        });
-    } catch (e) {
-        return "Unknown";
+    if (!dateString) return "";
+    const timePart = dateString.split(' ')[1];
+    
+    if (timePart) {
+        return timePart.substring(0, 5);
     }
+    return "";
   };
 
   if (loading) {
